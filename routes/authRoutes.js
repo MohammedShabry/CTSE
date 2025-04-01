@@ -10,15 +10,36 @@ const SECRET_KEY = process.env.JWT_SECRET || "supersecretkey";
 router.post("/register", async (req, res) => {
     try {
       const { username, password } = req.body;
+  
+      // Log the username and password for debugging
+      console.log("Received username and password:", username, password);
+  
+      // Hash password
       const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Create new user object
       const newUser = new User({ username, password: hashedPassword });
+  
+      // Log the user object before saving
+      console.log("Saving new user:", newUser);
+  
+      // Save the new user to the database
       await newUser.save();
+  
+      // Success log
+      console.log("User registered successfully");
+  
+      // Send success response
       res.json({ message: "User registered successfully" });
     } catch (error) {
-      console.error("Error details: ", error);  // Log the error to the console for debugging
-      res.status(500).json({ error: "Error registersing user", details: error.message });
+      // Log the error
+      console.error("Error details: ", error);
+  
+      // Send error response
+      res.status(500).json({ error: "Error registeringggg user", details: error.message });
     }
   });
+  
   
 
 router.post("/login", async (req, res) => {
