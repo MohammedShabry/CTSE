@@ -8,16 +8,18 @@ const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || "supersecretkey";
 
 router.post("/register", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, password: hashedPassword });
-    await newUser.save();
-    res.json({ message: "User registered successfully" });
-  } catch (error) {
-    res.status(500).json({ error: "Error registering user" });
-  }
-});
+    try {
+      const { username, password } = req.body;
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new User({ username, password: hashedPassword });
+      await newUser.save();
+      res.json({ message: "User registered successfully" });
+    } catch (error) {
+      console.error("Error details: ", error);  // Log the error to the console for debugging
+      res.status(500).json({ error: "Error registersing user", details: error.message });
+    }
+  });
+  
 
 router.post("/login", async (req, res) => {
   try {
